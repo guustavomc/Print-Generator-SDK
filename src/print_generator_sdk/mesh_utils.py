@@ -1,6 +1,6 @@
 import trimesh
 
-from core.base import GenerationResult
+from .base import GenerationResult 
 
 # Volume máximo de impressão (X, Y, Z) em mm; ajuste para a sua impressora
 BED_SIZE_MM = (256.0, 256.0, 256.0)
@@ -36,9 +36,10 @@ def export_glb(mesh: trimesh.Trimesh) -> bytes:
     return mesh.export(file_type="glb")
 
 
-def build_result(mesh: trimesh.Trimesh) -> GenerationResult:
+def build_result(
+    mesh: trimesh.Trimesh, bed_size: tuple[float, float, float] = BED_SIZE_MM) -> GenerationResult:
     """Valida a malha e monta o GenerationResult padrão."""
-    validate(mesh)
+    validate(mesh, bed_size)
     x, y, z = (float(v) for v in mesh.extents)
     return GenerationResult(
         mesh=mesh,
